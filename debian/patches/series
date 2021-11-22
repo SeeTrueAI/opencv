@@ -2,3 +2,4 @@ change_jquery.js_path
 face-no-download.patch
 cmake-dont-install-inexistent-files.patch
 cmake-revert-openexr.patch
+0001-dnn-onnx_importer-Use-Get-to-access-fields-instead-o.patch

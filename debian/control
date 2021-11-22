@@ -5,13 +5,10 @@ Uploaders: Sam Hocevar (Debian packages) <sam+deb@zoy.org>,
            Mo Zhou <lumin@debian.org>
 Section: devel
 Priority: optional
-Build-Depends: ant [!hppa !hurd-any !kfreebsd-any],
-               cmake,
-               debhelper-compat (= 12),
-               default-jdk [!hppa !hurd-any !kfreebsd-any],
+Build-Depends: cmake,
+               debhelper-compat (= 11),
                dh-python,
                doxygen,
-               javahelper,
                ninja-build,
                libavcodec-dev,
                libavformat-dev,
@@ -19,7 +16,7 @@ Build-Depends: ant [!hppa !hurd-any !kfreebsd-any],
                libdc1394-22-dev [linux-any],
                libeigen3-dev,
                libgdal-dev,
-               libgdcm-dev [!hppa !m68k !powerpcspe !sh4 !sparc64 !x32],
+               libgdcm2-dev [!hppa !m68k !powerpcspe !sh4 !sparc64 !x32],
                libgl1-mesa-dev,
                libglu1-mesa-dev,
                libgoogle-glog-dev,
@@ -39,11 +36,10 @@ Build-Depends: ant [!hppa !hurd-any !kfreebsd-any],
                libtiff-dev,
                libv4l-dev [linux-any],
                libvtk6-dev,
-               libvtkgdcm-dev [!alpha !ppc64 !x32],
+               libvtkgdcm2-dev [!alpha !ppc64 !x32],
                libgdcm-tools,
                libgstreamer1.0-dev,
                libgstreamer-plugins-base1.0-dev,
-               maven-repo-helper [!hppa !hurd-any !kfreebsd-any],
                ocl-icd-opencl-dev,
                protobuf-compiler,
                python3-dev,
@@ -99,7 +95,6 @@ Depends: libopencv-calib3d-dev (= ${binary:Version}),
          libopencv-videoio-dev (= ${binary:Version}),
          libopencv-videostab-dev (= ${binary:Version}),
          libopencv-viz-dev (= ${binary:Version}),
-         libopencv4.2-java (= ${source:Version}),
          pkg-config,
          ${misc:Depends},
          ${shlibs:Depends},
@@ -276,7 +271,7 @@ Package: libopencv-imgcodecs-dev
 Architecture: any
 Multi-Arch: same
 Section: libdevel
-Depends: libgdcm-dev [!hppa !m68k !powerpcspe !riscv64 !sh4],
+Depends: libgdcm2-dev [!hppa !m68k !powerpcspe !riscv64 !sh4],
          libopencv-imgcodecs4.2 (= ${binary:Version}),
          libopencv-imgproc-dev (= ${binary:Version}),
          ${misc:Depends}
@@ -1096,65 +1091,6 @@ Description: computer vision contrlib library
    - ximgproc
    - xobjdetect
    - xphoto
- .
- The Open Computer Vision Library is a collection of algorithms and sample
- code for various computer vision problems. The library is compatible with
- IPL (Intel's Image Processing Library) and, if available, can use IPP
- (Intel's Integrated Performance Primitives) for better performance.
- .
- OpenCV provides low level portable data types and operators, and a set
- of high level functionalities for video acquisition, image processing and
- analysis, structural analysis, motion analysis and object tracking, object
- recognition, camera calibration and 3D reconstruction.
-
-Package: libopencv4.2-java
-Architecture: all
-Multi-Arch: foreign
-Section: java
-Depends: libopencv4.2-jni (>= ${binary:Version}),
-         ${java:Depends},
-         ${misc:Depends}
-Recommends: ${java:Recommends}
-Breaks: libopencv2.4-java,
-        libopencv3.2-java,
-        libopencv3.3-java,
-        libopnecv3.4-java,
-        libopencv4.0-java,
-        libopencv4.1-java
-Replaces: libopencv2.4-java,
-          libopencv3.2-java,
-          libopencv3.3-java,
-          libopencv3.4-java,
-          libopencv4.0-java,
-          libopencv4.1-java
-Description: Java bindings for the computer vision library
- This package contains Java bindings for the OpenCV (Open Computer Vision)
- library.
- .
- The Open Computer Vision Library is a collection of algorithms and sample
- code for various computer vision problems. The library is compatible with
- IPL (Intel's Image Processing Library) and, if available, can use IPP
- (Intel's Integrated Performance Primitives) for better performance.
- .
- OpenCV provides low level portable data types and operators, and a set
- of high level functionalities for video acquisition, image processing and
- analysis, structural analysis, motion analysis and object tracking, object
- recognition, camera calibration and 3D reconstruction.
-
-Package: libopencv4.2-jni
-Architecture: amd64 arm64 armel armhf i386 mips64el mipsel ppc64el s390x alpha ia64 m68k powerpc ppc64 riscv64 sh4 sparc64 x32
-Section: java
-Depends: libopencv-calib3d4.2 (= ${binary:Version}),
-         libopencv-highgui4.2 (= ${binary:Version}),
-         libopencv-ml4.2 (= ${binary:Version}),
-         libopencv-objdetect4.2 (= ${binary:Version}),
-         libopencv-photo4.2 (= ${binary:Version}),
-         libopencv-video4.2 (= ${binary:Version}),
-         ${misc:Depends},
-         ${shlibs:Depends}
-Description: Java jni library for the computer vision library
- This package contains Java jni library for the OpenCV (Open Computer Vision)
- library.
  .
  The Open Computer Vision Library is a collection of algorithms and sample
  code for various computer vision problems. The library is compatible with

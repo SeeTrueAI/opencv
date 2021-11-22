@@ -1,0 +1,55 @@
+From 1325e608743f025384fa1e9b4ad8a70718cdde87 Mon Sep 17 00:00:00 2001
+From: Ievgen Popovych <ievgenp@seetrue.ai>
+Date: Mon, 22 Nov 2021 19:57:05 +0200
+Subject: [PATCH] dnn: onnx_importer: Use Get() to access fields instead of
+ subscript
+
+Apparently earlier protobuf versions do not support subscript.
+See also https://github.com/opencv/opencv/issues/16355.
+---
+ modules/dnn/src/onnx/onnx_importer.cpp | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/modules/dnn/src/onnx/onnx_importer.cpp b/modules/dnn/src/onnx/onnx_importer.cpp
+index 79836f8da5..f46dee2d48 100644
+--- a/modules/dnn/src/onnx/onnx_importer.cpp
++++ b/modules/dnn/src/onnx/onnx_importer.cpp
+@@ -93,6 +93,17 @@ void releaseONNXTensor(opencv_onnx::TensorProto& tensor_proto)
+     }
+ }
+ 
++template<typename T1, typename T2>
++void convertInt64PbToInt32(const T1& src, T2& dst, int size)
++{
++    for (int i = 0; i < size; i++) {
++        if (src.Get(i) < std::numeric_limits<int32_t>::min() || src.Get(i) > std::numeric_limits<int32_t>::max()) {
++            CV_Error(Error::StsOutOfRange, "Input is out of OpenCV 32S range");
++        }
++        dst[i] = saturate_cast<int32_t>(src.Get(i));
++    }
++}
++
+ template<typename T1, typename T2>
+ void convertInt64ToInt32(const T1& src, T2& dst, int size)
+ {
+@@ -141,7 +152,7 @@ Mat getMatFromTensor(opencv_onnx::TensorProto& tensor_proto)
+ 
+         if (!tensor_proto.int64_data().empty()) {
+             ::google::protobuf::RepeatedField< ::google::protobuf::int64> src = tensor_proto.int64_data();
+-            convertInt64ToInt32(src, dst, blob.total());
++            convertInt64PbToInt32(src, dst, blob.total());
+         }
+         else
+         {
+@@ -206,7 +217,7 @@ std::map<std::string, Mat> ONNXImporter::getGraphTensors(
+ 
+ static DictValue parse(const ::google::protobuf::RepeatedField< ::google::protobuf::int64>& src) {
+     std::vector<int32_t> dst(src.size());
+-    convertInt64ToInt32(src, dst, src.size());
++    convertInt64PbToInt32(src, dst, src.size());
+     return DictValue::arrayInt(&dst[0], src.size());
+ }
+ 
+-- 
+2.17.1
+
